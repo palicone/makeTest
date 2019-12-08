@@ -17,10 +17,10 @@ info:
 	@echo "BINOUT: $(BINOUT)"
 	@echo "CURDIR: $(CURDIR)"
 	@echo "ARTIFACT: $(ARTIFACT)"
-	@echo " "
+	@echo "----"
 
 all: info $(OBJOUT) $(BINOUT) $(ARTIFACT)
-	@echo " "
+	@echo "----"
 
 $(OBJOUT):
 ifneq "$(wildcard $(OBJOUT) )" ""
@@ -38,15 +38,15 @@ endif
 
 $(ARTIFACT): $(COBJECTS) $(CPPOBJECTS)
 ifeq ($(suffix $(ARTIFACT)), .a)
-	@echo '******* Started archiving *******'
+	@echo "******* Started archiving *******"
 	"$(AR)" $(ARFLAGS) "$@" $(COBJECTS) $(CPPOBJECTS)
-	@echo 'Finished archiving: $@'
+	@echo "Finished archiving: $@"
 else
-	@echo '******* Started linking *******'
+	@echo "******* Started linking *******"
 	"$(LN)" $(LNFLAGS) -o "$@" $(LIB_INCLUDES) $(COBJECTS) $(CPPOBJECTS) $(LIBS)
-	@echo 'Finished building target: $@'
+	@echo "Finished building target: $@"
 endif
-	@echo " "
+	@echo "----"
 
 $(COBJECTS):
 	$(eval OBJ_NAME_NOEXT := $(basename $(notdir $@)))
@@ -57,7 +57,7 @@ $(COBJECTS):
 	@echo "C compile: $(SRC)"
 	"$(CC)" $(CCFLAGS) $(DEFINES) $(INCLUDES) -MMD -MP -MF"$(OBJ_DEP)" -MT"$(OBJ_OUT)" -o "$(OBJ_OUT)" "$(SRC)"
 	@echo "Compiled to: $@"
-	@echo " "
+	@echo "----"
 
 $(CPPOBJECTS):
 	$(eval OBJ_NAME_NOEXT := $(basename $(notdir $@)))
@@ -68,11 +68,10 @@ $(CPPOBJECTS):
 	@echo "C++ compile: $(SRC)"
 	"$(CXX)" $(CXXFLAGS) $(DEFINES) $(INCLUDES) -MMD -MP -MF"$(OBJ_DEP)" -MT"$(OBJ_OUT)" -o "$(OBJ_OUT)" "$(SRC)"
 	@echo "Compiled to: $@"
-	@echo " "
+	@echo "----"
 
 
 clean:
-	cd "$(OBJOUT)*"
-	@echo $(RM) *
+	cd "$(OBJOUT)" && $(RM) *
 
 .PHONY: all clean
